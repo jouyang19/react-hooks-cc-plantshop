@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 
 function PlantPage() {
   const [plants, setPlants] = useState([]);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     fetch("http://localhost:6001/plants")
@@ -13,11 +14,15 @@ function PlantPage() {
       .then((plants) => setPlants(plants));
   }, []);
 
+  const filteredPlants = plants.filter((plant) =>
+    plant.name.toLowerCase().includes(query.toLowerCase())
+  );
+
   return (
     <main>
       <NewPlantForm plants={plants} setPlants={setPlants} />
-      <Search />
-      <PlantList plants={plants} />
+      <Search query={query} setQuery={setQuery} />
+      <PlantList plants={filteredPlants} />
     </main>
   );
 }
